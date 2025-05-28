@@ -11,9 +11,6 @@ from datetime import datetime
 import uuid  # for unique message IDs
 import requests
 
-MODEL_URL = "https://huggingface.co/ayoubbob606/ChatBotMindCareIA/resolve/main/model.safetensors"
-MODEL_PATH = "bert_model/model.safetensors"
-
 def download_model():
     if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) < 10000000:
         print("📦 Downloading model from Hugging Face...")
@@ -24,6 +21,12 @@ def download_model():
         print("✅ Model downloaded.")
     else:
         print("✅ Model already exists and looks fine.")
+# Download the model BEFORE loading it
+download_model()
+
+# Now it's safe to load
+model = BertForSequenceClassification.from_pretrained(model_path).to(device)
+tokenizer = BertTokenizer.from_pretrained(model_path)
 # 🔐 Initialize Firebase app
 cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
