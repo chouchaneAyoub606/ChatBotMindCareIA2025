@@ -3,4 +3,4 @@ uvicorn
 torch
 transformers
 firebase-admin
-pydantic
+requests
