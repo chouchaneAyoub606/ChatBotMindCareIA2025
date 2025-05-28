@@ -11,20 +11,19 @@ from datetime import datetime
 import uuid  # for unique message IDs
 import requests
 
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1FVDaun5BBeIbxYuIw4dYg1yy0N1xOHRi"
+MODEL_URL = "https://huggingface.co/ayoubbob606/ChatBotMindCareIA/resolve/main/model.safetensors"
 MODEL_PATH = "bert_model/model.safetensors"
 
 def download_model():
-    if not os.path.exists(MODEL_PATH):
-        print("Downloading model from Google Drive...")
+    if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) < 10000000:
+        print("📦 Downloading model from Hugging Face...")
         response = requests.get(MODEL_URL, allow_redirects=True)
         os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
         with open(MODEL_PATH, "wb") as f:
             f.write(response.content)
         print("✅ Model downloaded.")
-
-download_model()
-
+    else:
+        print("✅ Model already exists and looks fine.")
 # 🔐 Initialize Firebase app
 cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
